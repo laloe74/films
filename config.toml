@@ -1,0 +1,6 @@
+base_url = "https://films.tongmingzhi.com"
+
+title = "菲林之丘"
+description = "观影记录"
+
+minify_html = true
