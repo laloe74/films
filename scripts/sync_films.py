@@ -29,10 +29,25 @@ except ModuleNotFoundError:
     import tomli as tomllib
 
 NEOB_API = "https://neodb.social/api"
+NEOB_BASE = "https://neodb.social"
 TOML_PATH = Path("content/films.toml")
 INDEX_PATH = Path("content/_index.md")
 PAGE_SIZE = 50
 CST = timezone(timedelta(hours=8))
+
+
+def norm_url(url: str) -> str:
+    """Normalize URL to just the path for comparison."""
+    if url.startswith(NEOB_BASE):
+        return url[len(NEOB_BASE):]
+    return url
+
+
+def full_url(path: str) -> str:
+    """Ensure URL has full https://neodb.social prefix."""
+    if path.startswith("http"):
+        return path
+    return NEOB_BASE + path
 
 
 def fetch_marks(token: str, page_size: int = PAGE_SIZE, max_pages: int | None = None) -> list[dict]:
@@ -86,7 +101,7 @@ def mark_to_entry(mark: dict, index: int) -> dict:
         "name": item.get("display_title") or item.get("title", ""),
         "date": mark.get("created_time", "")[:10],
         "score": neo_score_to_stars(mark.get("rating_grade")),
-        "url": item.get("url", ""),
+        "url": full_url(item.get("url", "")),
     }
 
 
@@ -127,10 +142,10 @@ def sync_auto(token: str):
     print(f"  NeoDB: {len(marks)} marks")
 
     existing = load_existing(TOML_PATH)
-    local_urls = {e["url"] for e in existing if e["url"]}
+    local_urls = {norm_url(e["url"]) for e in existing if e["url"]}
     max_idx = max((e.get("index", 0) for e in existing), default=0)
 
-    new_marks = [m for m in marks if m["item"]["url"] not in local_urls]
+    new_marks = [m for m in marks if norm_url(m["item"]["url"]) not in local_urls]
     if not new_marks:
         print("  No new movies.")
         update_index_timestamp(INDEX_PATH)
@@ -156,20 +171,20 @@ def sync_full(token: str):
     marks = fetch_marks(token)
     print(f"  NeoDB: {len(marks)} marks")
 
-    neo_urls = {m["item"]["url"] for m in marks if m.get("item", {}).get("url")}
+    neo_urls = {norm_url(m["item"]["url"]) for m in marks if m.get("item", {}).get("url")}
     existing = load_existing(TOML_PATH)
 
-    local_neo = [e for e in existing if e.get("url", "").startswith("https://neodb.social/")]
-    local_manual = [e for e in existing if not e.get("url", "").startswith("https://neodb.social/")]
-    local_neo_urls = {e["url"] for e in local_neo}
+    local_neo = [e for e in existing if norm_url(e.get("url", "")).startswith("/movie/")]
+    local_manual = [e for e in existing if not norm_url(e.get("url", "")).startswith("/movie/")]
+    local_neo_urls = {norm_url(e["url"]) for e in local_neo}
 
     keep_urls = local_neo_urls & neo_urls
     removed_urls = local_neo_urls - neo_urls
     new_urls = neo_urls - local_neo_urls
 
-    kept = [e for e in local_neo if e["url"] in keep_urls]
-    removed = [e for e in local_neo if e["url"] in removed_urls]
-    new_marks = [m for m in marks if m["item"]["url"] in new_urls]
+    kept = [e for e in local_neo if norm_url(e["url"]) in keep_urls]
+    removed = [e for e in local_neo if norm_url(e["url"]) in removed_urls]
+    new_marks = [m for m in marks if norm_url(m["item"]["url"]) in new_urls]
 
     print(f"  Keep: {len(kept)}  Remove: {len(removed)}  Add: {len(new_marks)}  Manual: {len(local_manual)}")
 
