@@ -45,5 +45,5 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "sync: update films from NeoDB"
-            git push
+            git pull --rebase && git push
           fi
