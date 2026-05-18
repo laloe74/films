@@ -56,7 +56,9 @@
                 <div class="row">
                     <div class="col-100 text-align-center">
                         <p class="text-color-secondary text-small">
-                            共 {{ total }} 部 ·
+                            共 {{ total }} 部
+                        </p>
+                        <p class="text-color-secondary text-small">
                             五星&thinsp;{{ s5 }}&ensp;
                             四星&thinsp;{{ s4 }}&ensp;
                             三星&thinsp;{{ s3 }}&ensp;
@@ -88,7 +90,8 @@
                                     {%- if m.score == 0 -%}
                                     ---
                                     {%- else -%}
-                                    {% for i in range(end=m.score) %}★{% endfor %}{% for i in range(end=5 - m.score) %}☆{% endfor %}
+                                    {% for i in range(end=m.score) %}★{% endfor %}{% for i in range(end=5 - m.score)
+                                    %}☆{% endfor %}
                                     {%- endif -%}
                                 </span>
                             </p>
