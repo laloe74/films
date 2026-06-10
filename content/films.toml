@@ -1,4 +1,11 @@
 [[movies]]
+index = 1196
+name = "极限高压"
+date = "2026-06-10"
+score = 4
+url = "https://neodb.social/movie/2bn1CV2vMBMoYMBrVbpbhk"
+
+[[movies]]
 index = 1195
 name = "雄狮少年"
 date = "2026-06-03"
