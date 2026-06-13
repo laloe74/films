@@ -1,134 +1,63 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-
+<html lang="zh">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="{{ config.description }}">
-    <link rel="icon" href="{{ get_url(path='img/favicon.png', trailing_slash=false) }}" type="image/png">
-    <link rel="apple-touch-icon" href="{{ get_url(path='img/favicon.png', trailing_slash=false) }}">
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-    <meta property="og:title" content="{{ config.title }}">
-    <meta property="og:description" content="{{ config.description }}">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="{{ get_url(path='img/favicon.png', trailing_slash=false) }}">
-    <link rel="preconnect" href="https://rsms.me/">
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    <link rel="stylesheet" href="{{ get_url(path='brute.css', trailing_slash=false) }}">
-    <link rel="stylesheet" href="{{ get_url(path='boot.css', trailing_slash=false) }}">
-    <link rel="stylesheet" href="{{ get_url(path='style.css', trailing_slash=false) }}">
-    <title>{{ config.title }}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="{{ config.description }}">
+  <link rel="icon" href="{{ config.base_url }}/img/favicon.png" type="image/png">
+  <meta property="og:title" content="{{ config.title }}">
+  <meta property="og:description" content="{{ config.description }}">
+  <meta property="og:type" content="website">
+  <title>{{ config.title }}</title>
+  <link rel="stylesheet" href="{{ config.base_url }}/style.css">
 </head>
-
 <body>
-    <main id="main">
-        {% set data = load_data(path="films.toml") %}
-        {% set movies = data.movies | sort(attribute="date") | reverse %}
-
-        {# Count stats #}
-        {% set_global total = 0 %}
-        {% set_global s1 = 0 %}{% set_global s2 = 0 %}{% set_global s3 = 0 %}{% set_global s4 = 0 %}{% set_global s5 = 0
-        %}
-        {% for m in movies %}
-        {% set_global total = total + 1 %}
-        {% if m.score == 1 %}{% set_global s1 = s1 + 1 %}
-        {% elif m.score == 2 %}{% set_global s2 = s2 + 1 %}
-        {% elif m.score == 3 %}{% set_global s3 = s3 + 1 %}
-        {% elif m.score == 4 %}{% set_global s4 = s4 + 1 %}
-        {% elif m.score == 5 %}{% set_global s5 = s5 + 1 %}
-        {% endif %}
-        {% endfor %}
-
-        <section class="hero">
-            <div class="container">
-                <div class="row">
-                    <div class="col-100 text-align-center">
-                        <h1><a href="https://tongmingzhi.com" target="_blank">{{ config.title }}</a></h1>
-                        <div class="label small primary border">自动更新：{{ section.extra.updated_at }}</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="small-padding-top small-padding-bottom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-100 text-align-center">
-                        <p class="text-color-secondary text-small">
-                            共 {{ total }} 部
-                        </p>
-                        <p class="text-color-secondary text-small">
-                            五星&thinsp;{{ s5 }}&ensp;
-                            四星&thinsp;{{ s4 }}&ensp;
-                            三星&thinsp;{{ s3 }}&ensp;
-                            二星&thinsp;{{ s2 }}&ensp;
-                            一星&thinsp;{{ s1 }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="blog-feed large-padding-bottom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-100">
-                        {% set_global last_year = "" %}
-
-                        {% for m in movies %}
-                        {% set this_year = m.date | truncate(length=4, end="") %}
-
-                        {% if this_year != last_year %}
-                        {% set_global last_year = this_year %}
-                        <span class="label small filled secondary year-label">{{ this_year }}</span>
-                        {% endif %}
-
-                        <div class="blog-list-item{% if m.score == 5 %} gold{% endif %}">
-                            <a class="blog-list-item__title" href="{{ m.url }}" target="_blank" rel="noopener">{{ m.name }}</a>
-                            <div class="blog-list-item__meta">
-                                <span class="film-score">
-                                    {%- if m.score == 0 -%}
-                                    ---
-                                    {%- else -%}
-                                    {% for i in range(end=m.score) %}★{% endfor %}{% for i in range(end=5 - m.score)
-                                    %}☆{% endfor %}
-                                    {%- endif -%}
-                                </span>
-                                <time class="blog-list-item__date text-color-secondary" datetime="{{ m.date }}">{{ m.date |
-                                    date(format='%m.%d') }}</time>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <button class="back-to-top button primary regular" aria-label="返回顶部">↑</button>
-
-    <script>
-        (function () {
-            var btn = document.querySelector('.back-to-top');
-            if (!btn) return;
-            var ticking = false;
-            function update() {
-                if (window.scrollY > 400) {
-                    btn.classList.add('visible');
-                } else {
-                    btn.classList.remove('visible');
-                }
-                ticking = false;
-            }
-            window.addEventListener('scroll', function () {
-                if (!ticking) {requestAnimationFrame(update); ticking = true;}
-            });
-            btn.addEventListener('click', function () {
-                window.scrollTo({top: 0, behavior: 'smooth'});
-            });
-        })();
-    </script>
+  <header>
+    <h1>{{ config.title }}</h1>
+    <p class="updated">{{ section.extra.updated_at }}</p>
+  </header>
+  <main>
+    {% set data = load_data(path="content/films.toml") %}
+    {% set movies = data.movies | sort(attribute="date") | reverse %}
+    {% set total = movies | length %}
+    {% set s5 = movies | filter(attribute="score", value=5) | length %}
+    {% set s4 = movies | filter(attribute="score", value=4) | length %}
+    {% set s3 = movies | filter(attribute="score", value=3) | length %}
+    {% set s2 = movies | filter(attribute="score", value=2) | length %}
+    {% set s1 = movies | filter(attribute="score", value=1) | length %}
+    <div class="stats">
+      <p>总数 {{ total }}</p>
+      <p>五星 {{ s5 }} / 四星 {{ s4 }} / 三星 {{ s3 }} / 二星 {{ s2 }} / 一星 {{ s1 }}</p>
+    </div>
+    {% set current_year = "" %}
+    {% for movie in movies %}
+      {% set year = movie.date | split(pat="-") | first %}
+      {% if year != current_year %}
+        {% set_global current_year = year %}
+        <h2 class="year-header">{{ year }}</h2>
+      {% endif %}
+      <article class="movie-item{% if movie.score == 5 %} five-star{% endif %}">
+        <div class="movie-main">
+          <a href="{{ movie.url }}" target="_blank" rel="noopener" class="movie-title">
+            {{ movie.name }}
+          </a>
+          <span class="dotline"></span>
+          <div class="movie-meta">
+            <span class="movie-score">
+              {% if movie.score > 0 %}
+              {%- if movie.score >= 1 %}★{% else %}☆{% endif -%}
+              {%- if movie.score >= 2 %}★{% else %}☆{% endif -%}
+              {%- if movie.score >= 3 %}★{% else %}☆{% endif -%}
+              {%- if movie.score >= 4 %}★{% else %}☆{% endif -%}
+              {%- if movie.score >= 5 %}★{% else %}☆{% endif -%}
+              {% else %}-{% endif %}
+            </span>
+            <span class="movie-date">{{ movie.date | split(pat="-") | slice(start=1, end=3) | join(sep=".") }}</span>
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </main>
 </body>
-
 </html>
