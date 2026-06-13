@@ -84,8 +84,9 @@
                         <span class="label small filled secondary year-label">{{ this_year }}</span>
                         {% endif %}
 
-                        <a class="blog-list-item" href="{{ m.url }}" target="_blank" rel="noopener">
-                            <p class="blog-list-item__title">{{ m.name }}
+                        <div class="blog-list-item{% if m.score == 5 %} gold{% endif %}">
+                            <a class="blog-list-item__title" href="{{ m.url }}" target="_blank" rel="noopener">{{ m.name }}</a>
+                            <div class="blog-list-item__meta">
                                 <span class="film-score">
                                     {%- if m.score == 0 -%}
                                     ---
@@ -94,10 +95,10 @@
                                     %}☆{% endfor %}
                                     {%- endif -%}
                                 </span>
-                            </p>
-                            <time class="blog-list-item__date text-color-secondary" datetime="{{ m.date }}">{{ m.date |
-                                date(format='%m.%d') }}</time>
-                        </a>
+                                <time class="blog-list-item__date text-color-secondary" datetime="{{ m.date }}">{{ m.date |
+                                    date(format='%m.%d') }}</time>
+                            </div>
+                        </div>
                         {% endfor %}
                     </div>
                 </div>
