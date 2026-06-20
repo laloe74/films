@@ -1,4 +1,11 @@
 [[movies]]
+index = 1198
+name = "抓特务"
+date = "2026-06-20"
+score = 2
+url = "https://neodb.social/movie/3CotziSNYyZ1ovyvroJJEh"
+
+[[movies]]
 index = 1197
 name = "罪人"
 date = "2026-06-18"
