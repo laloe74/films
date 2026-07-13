@@ -1,4 +1,11 @@
 [[movies]]
+index = 1200
+name = "盲目的雄心"
+date = "2026-07-13"
+score = 3
+url = "https://neodb.social/movie/6LP2qpl5H6OwH8CxqpLw1o"
+
+[[movies]]
 index = 1199
 name = "金谍行动"
 date = "2026-07-06"
