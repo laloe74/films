@@ -1,4 +1,11 @@
 [[movies]]
+index = 1206
+name = "怒之杀"
+date = "2026-09-15"
+score = 2
+url = "https://neodb.social/movie/7jk5vsy0KGRlPILTdAxvKK"
+
+[[movies]]
 index = 1205
 name = "后室"
 date = "2026-08-11"
