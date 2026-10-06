@@ -38,35 +38,62 @@ def _is_chinese(s: str) -> bool:
     return bool(re.search(r'[一-鿿㐀-䶿]', s))
 
 
+def _normalize_lang(lang: str) -> str:
+    """Normalize a language tag for comparison (e.g. zh_CN -> zh-cn)."""
+    return lang.strip().lower().replace("_", "-")
+
+
+def _title_rank(lang: str) -> int:
+    """Rank a language tag for title selection (lower is better).
+
+    0: Simplified Chinese, Mainland China (zh-CN, zh-CNhans)
+    1: Simplified Chinese, other tags (zh-Hans, zh-SG, zh-MY)
+    2: Chinese, any other tag (zh, zh-Hant, zh-TW, zh-HK, ...)
+    3: Non-Chinese
+    """
+    key = _normalize_lang(lang)
+    if key in ("zh-cn", "zh-cnhans", "zh-cn-hans"):
+        return 0
+    if key.startswith("zh-hans") or key in ("zh-sg", "zh-my"):
+        return 1
+    if key.startswith("zh"):
+        return 2
+    return 3
+
+
 def _pick_chinese_title(item: dict) -> str:
     """Pick the best Chinese title from NeoDB item fields.
 
-    Priority: localized_title (zh-Hans/zh-CN) > localized_title (any zh) >
-              title (Chinese) > display_title (Chinese) > title
+    Priority:
+        1. Simplified Chinese, Mainland China (zh-CN)
+        2. Simplified Chinese, other tags (zh-Hans)
+        3. Chinese, any other tag (zh, zh-Hant, zh-TW, zh-HK, ...)
+        4. title / display_title containing Chinese characters
+        5. title
+
     NeoDB API has deprecated display_title and removed alt_title.
     Chinese names are now in localized_title as [{lang: "zh-Hans", text: "..."}].
     """
-    title = item.get("title", "")
-    display = item.get("display_title", "")
-
-    # Check localized_title for Chinese entry, preferring Simplified Chinese
     localized = item.get("localized_title", [])
-    simplified = None
-    fallback = None
+    best_text = None
+    best_rank = None
     for loc in localized:
-        lang = loc.get("lang", "")
+        lang = loc.get("lang", "") or ""
         text = loc.get("text", "")
         if not text:
             continue
-        if lang in ("zh-Hans", "zh-CN", "zh-CNhans"):
-            simplified = text
-        elif lang.startswith("zh") and fallback is None:
-            fallback = text
+        rank = _title_rank(lang)
+        if rank == 3:
+            continue
+        if best_rank is None or rank < best_rank:
+            best_rank = rank
+            best_text = text
 
-    if simplified:
-        return simplified
-    if fallback:
-        return fallback
+    if best_text:
+        return best_text
+
+    title = item.get("title", "")
+    display = item.get("display_title", "")
 
     # Prefer Chinese in title
     if title and _is_chinese(title):
