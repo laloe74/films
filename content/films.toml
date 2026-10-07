@@ -1,23 +1,23 @@
 [[movies]]
 index = 1210
-name = "生化危机"
-date = "2026-10-07"
-score = 3
-url = "https://neodb.social/movie/0Am3sOZ3eaCJppyyWZ9sxK"
-
-[[movies]]
-index = 1209
 name = "生化危机3：灭绝"
 date = "2026-10-07"
 score = 3
 url = "https://neodb.social/movie/2R6cEuQDzRsgSWvVXwV0WQ"
 
 [[movies]]
-index = 1208
+index = 1209
 name = "生化危机2：启示录"
 date = "2026-10-07"
 score = 3
 url = "https://neodb.social/movie/0tkfJZhfqOlmfYExlJlVie"
+
+[[movies]]
+index = 1208
+name = "生化危机"
+date = "2026-10-07"
+score = 3
+url = "https://neodb.social/movie/0Am3sOZ3eaCJppyyWZ9sxK"
 
 [[movies]]
 index = 1207
