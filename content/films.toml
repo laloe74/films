@@ -1,4 +1,11 @@
 [[movies]]
+index = 1208
+name = "生化危机2：启示录"
+date = "2026-10-07"
+score = 3
+url = "https://neodb.social/movie/0tkfJZhfqOlmfYExlJlVie"
+
+[[movies]]
 index = 1207
 name = "生化危机：爆发夜"
 date = "2026-10-06"
