@@ -19,7 +19,8 @@
   </header>
   <main>
     {% set data = load_data(path="content/films.toml") %}
-    {% set movies = data.movies | sort(attribute="date") | reverse %}
+    {# Sort is stable: index first, then date -> within one date, larger index (newer) comes first. #}
+    {% set movies = data.movies | sort(attribute="index") | sort(attribute="date") | reverse %}
     {% set total = movies | length %}
     {% set s5 = movies | filter(attribute="score", value=5) | length %}
     {% set s4 = movies | filter(attribute="score", value=4) | length %}
