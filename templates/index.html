@@ -22,11 +22,11 @@
     {# Sort is stable: index first, then date -> within one date, larger index (newer) comes first. #}
     {% set movies = data.movies | sort(attribute="index") | sort(attribute="date") | reverse %}
     {% set total = movies | length %}
-    {% set s5 = movies | filter(attribute="score", value=5) | length %}
-    {% set s4 = movies | filter(attribute="score", value=4) | length %}
-    {% set s3 = movies | filter(attribute="score", value=3) | length %}
-    {% set s2 = movies | filter(attribute="score", value=2) | length %}
-    {% set s1 = movies | filter(attribute="score", value=1) | length %}
+    {% set s5 = [movie for movie in movies if movie.score == 5] | length %}
+    {% set s4 = [movie for movie in movies if movie.score == 4] | length %}
+    {% set s3 = [movie for movie in movies if movie.score == 3] | length %}
+    {% set s2 = [movie for movie in movies if movie.score == 2] | length %}
+    {% set s1 = [movie for movie in movies if movie.score == 1] | length %}
     <div class="stats">
       <p>总数 {{ total }}</p>
       <p>五星 {{ s5 }} / 四星 {{ s4 }} / 三星 {{ s3 }} / 二星 {{ s2 }} / 一星 {{ s1 }}</p>
@@ -38,6 +38,7 @@
         {% set_global current_year = year %}
         <h2 class="year-header">{{ year }}</h2>
       {% endif %}
+      {% set date_parts = movie.date | split(pat="-") %}
       <article class="movie-item{% if movie.score == 5 %} five-star{% endif %}">
         <div class="movie-main">
             <div class="movie-meta">
@@ -55,7 +56,7 @@
             {{ movie.name }}
             </a>
           <span class="dotline"></span>
-          <span class="movie-date">{{ movie.date | split(pat="-") | slice(start=1, end=3) | join(sep=".") }}</span>
+          <span class="movie-date">{{ date_parts[1] }}.{{ date_parts[2] }}</span>
         </div>
       </article>
     {% endfor %}
