@@ -1,4 +1,11 @@
 [[movies]]
+index = 1211
+name = "希望"
+date = "2026-11-01"
+score = 2
+url = "https://neodb.social/movie/2NTHgDYhHlrGWfeoUlar97"
+
+[[movies]]
 index = 1210
 name = "生化危机3：灭绝"
 date = "2026-10-07"
