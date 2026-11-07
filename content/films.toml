@@ -1,4 +1,11 @@
 [[movies]]
+index = 1212
+name = "铁雨"
+date = "2026-11-07"
+score = 4
+url = "https://neodb.social/movie/3sPB6GYYECxV5a8T7jVnM1"
+
+[[movies]]
 index = 1211
 name = "希望"
 date = "2026-11-01"
